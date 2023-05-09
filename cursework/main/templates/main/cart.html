@@ -1,0 +1,55 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Книжная полка{% endblock %}
+
+{% block body %}
+
+    <div class="main-container-right">
+        <div class="cart">
+          <center><h2 style="margin-botto5em;">Полка</h2></center>
+          {% if object.items.all %}
+          <table class="table">
+              <thead>
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Название</th>
+                  <th scope="col">Автор</th>
+                  <th scope="col">Действие</th>
+                  <th scope="col">Информация</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for order_item in object.items.all %}
+                  <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ order_item.item.title }}</td>
+                      <td>{{ order_item.item.author }}</td>
+                      <td>
+                          <a href="{% url 'remove_single_item_from_cart' order_item.item.pk %}" style="color:black; text-decoration: none;">Удалить</a>
+                      </td>
+                      <td>
+                          <a href="{% url 'book_read' product_id=order_item.item.id %}" style="color:black; text-decoration: none;">Прочитать</a>
+                      </td>
+                  </tr>
+              {% empty %}
+                  <tr>
+                      <td colspan='5'>Полка пуста</td>
+                  </tr>
+                  <tr>
+                      <td colspan="5">
+                      <a class='btn btn-primary float-right' href='/'>Вернуться на главную</a>
+                      </td>
+                  </tr>
+              {% endfor %}
+              {% else %}
+                  <h1>Полка пуста</h1>
+                  <a href="{% url 'catalog' %}">В каталог</a>
+              {% endif %}
+              </tbody>
+          </table>
+          </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block body %}
+
+    <div class="main-container-right">
+        <div class="user-info login-form">
+          <h1>Информация о пользователе</h1>
+          <form>
+            <label for="username">Имя пользователя:</label>
+            <h3>{{ user.username }}</h3>
+
+            <label for="email">Email:</label>
+            <h3>{{ user.email }}</h3>
+
+            <label for="first_name">Имя:</label>
+            <h3>{{ user.first_name }}</h3>
+
+            <label for="last_name">Фамилия:</label>
+            <h3>{{ user.last_name }}</h3>
+
+
+            <button type="button" class="btn btn-outline-primary me-2"><a style="color:black; text-decoration: none;" href="{% url 'edit_profile_page' %}">Редактировать</a></button>
+          </form>
+        </div>
+      </div>
+
+{% endblock %}
