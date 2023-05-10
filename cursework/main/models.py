@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 CATEGORY_CHOICES = (
@@ -35,7 +36,11 @@ class Book(models.Model):
 
 
 class Review(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField()
+    comment = models.TextField(max_length=1000)
+    date_added = models.DateTimeField(auto_now_add=True)
 
 
 class BookItem(models.Model):

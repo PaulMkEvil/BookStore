@@ -28,4 +28,6 @@ urlpatterns = [
     path('create_book/', views.create_book, name='create_book'),
     path('search/', views.search, name='search'),
     # path("search/product/<int:product_id>", views.product, name="product"),
+    path('product/<int:product_id>/add_review/', views.add_review, name='add_review'),
+    path('product/<int:product_id>/delete_review/<int:review_id>/', views.delete_review, name='delete_review'),
 ]

@@ -9,8 +9,37 @@
         <p><strong>Описание:</strong> {{ product.description }}</p>
         <p><strong>Дата публикации:</strong> {{ product.published_date }}</p>
         {%if not user.is_anonymous%}
-            <a href="{{product.get_add_to_cart_url}}" class="button">Добавить на полку</a>
+            <a href="{{product.get_add_to_cart_url}}" class="glow-button">Добавить на полку</a>
         {%endif%}
     </div>
+
+
+    <form method="POST" action="{% url 'add_review' product_id=product.id %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="glow-button">Добавить отзыв</button>
+    </form>
+
+
+{% if product.reviews.all %}
+  <h2>Отзывы</h2>
+  <ul>
+    {% for review in product.reviews.all %}
+      <li>
+        <h3>Пользователь: {{ review.user }}</h3>
+        <p>Рейтинг: {{ review.rating }}</p>
+        <p>Комментарий: {{ review.comment }}</p>
+        {% if review.user == request.user %}
+        <form method="POST" action="{% url 'delete_review' product_id=product.id review_id=review.id %}">
+            {% csrf_token %}
+            <button type="submit" class="glow-button">Удалить отзыв</button>
+        </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Пока нет отзывов.</p>
+{% endif %}
 
 {% endblock %}

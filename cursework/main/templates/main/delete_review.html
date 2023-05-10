@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ product.title }}{% endblock %}
+
+{% block body %}
+
+<h2>Удалить отзыв</h2>
+
+<p>Вы уверены, что хотите удалить этот отзыв?</p>
+
+<form method="POST" action="{% url 'delete_review' product_id=product.id review_id=review.id %}">
+  {% csrf_token %}
+
+  <!-- Кнопка подтверждения удаления -->
+  <button type="submit">Удалить</button>
+</form>
+
+{% endblock %}

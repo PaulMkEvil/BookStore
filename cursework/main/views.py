@@ -17,7 +17,7 @@ from django.conf import settings
 from django.http import HttpResponse
 
 from .models import Book, BookItem, Review, Order
-from .forms import BookForm
+from .forms import BookForm, ReviewForm
 
 
 def index(request):
@@ -249,3 +249,26 @@ def catalog_category(request, category):
     products = Book.objects.filter(category=category)
     context = {"products": products, "category": category, "categories": categories}
     return render(request, "main/catalog.html", context=context)
+
+
+def add_review(request, product_id):
+    book = get_object_or_404(Book, id=product_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.book = book
+            review.user = request.user
+            review.save()
+            return redirect('product', product_id=product_id)
+    else:
+        form = ReviewForm()
+    return render(request, 'main/add_review.html', {'form': form, 'product': book})
+
+
+def delete_review(request, product_id, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if request.method == 'POST' and review.user == request.user:
+        review.delete()
+        return redirect('product', product_id=product_id)
+    return render(request, 'main/delete_review.html', {'review': review})
