@@ -6,12 +6,18 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import user_passes_test
 from django.views import View
+from django.db.models import Q
 import pdfkit
+import mimetypes
+import os
+
 from django.conf import settings
 from django.http import HttpResponse
 
 from .models import Book, BookItem, Review, Order
+from .forms import BookForm
 
 
 def index(request):
@@ -24,23 +30,44 @@ def about(request):
 
 
 def book_read(request, product_id):
+    # Получите ссылку на PDF из модели
     book = Book.objects.get(id=product_id)
-    html = f"<h1>{book.title}</h1><p>{book.description}</p>"
-    options = {
-        "page-size": "A4",
-        "margin-top": "0.75in",
-        "margin-right": "0.75in",
-        "margin-bottom": "0.75in",
-        "margin-left": "0.75in",
-        "encoding": "UTF-8",
-    }
-    config = pdfkit.configuration(
-        wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-    )
-    pdf = pdfkit.from_string(html, False, options=options, configuration=config)
-    response = HttpResponse(pdf, content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="{book.title}.pdf"'
-    return response
+
+    # Укажите путь к папке, где хранятся PDF-файлы
+    file_path = book.book_file.path
+
+    # Проверьте, существует ли файл PDF
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as f:
+            # Определите тип содержимого файла
+            content_type, _ = mimetypes.guess_type(file_path)
+            response = HttpResponse(f.read(), content_type=content_type)
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+
+    # Если файл PDF не найден, верните 404 ошибку или другую обработку ошибки
+    return HttpResponse('PDF not found', status=404)
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) | Q(author__icontains=query)
+        )
+    else:
+        books = Book.objects.all()
+    return render(request, 'main/search_results.html', {'books': books, 'query': query})
+
+@user_passes_test(lambda u: u.is_superuser)
+def create_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('catalog')  # Перенаправьте пользователя на страницу списка книг
+    else:
+        form = BookForm()
+    return render(request, 'main/create_book.html', {'form': form})
 
 
 def catalog(request):
@@ -62,8 +89,7 @@ def catalog(request):
 def product(request, product_id):
     product = Book.objects.get(id=product_id)
     context = {"product": product}
-    image = product.image
-    return render(request, "main/product.html", context=context)
+    return render(request, "main/book.html", context=context)
 
 
 def login_request(request):

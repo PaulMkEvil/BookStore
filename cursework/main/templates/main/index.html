@@ -3,6 +3,29 @@
 {% block title %}Книжная полка{% endblock %}
 
 {% block body %}
-    <h1>Заголовок</h1>
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal">Виртуальная книжная полка</h1>
+      <p class="fs-5 text-body-secondary">Любые книги любого жанра абсолютно бесплатно!</p>
+       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search' %}" method="GET">
+           <input class="form-control form-control-blue text-bg-light" type="text" name="q" placeholder="Поиск...">
+<!--           <button type="submit">Найти</button>-->
+       </form>
+    </div>
 
+    <div class="ui-container">
+        {% for book in books %}
+        <form action="" class="ui-form">
+            <h3>{{ book.title }}</h3>
+            <div class="form-row">
+                <h5>{{ book.author }}</h5>
+            </div>
+            <div class="form-row">
+                <h5>{{ book.published_date }}</h5>
+            </div>
+            <a href="{% url 'product' product_id=book.id %}" class="glow-button">
+                Подробнее
+            </a>
+        </form>
+        {% endfor %}
+    </div>
 {% endblock %}

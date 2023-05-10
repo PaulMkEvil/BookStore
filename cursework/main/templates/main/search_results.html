@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+{% block body %}
+    <h2>Результаты поиска для "{{ query }}"</h2>
+
+    {% if books %}
+    <div class="ui-container">
+        {% for book in books %}
+        <form action="" class="ui-form">
+            <h3>{{ book.title }}</h3>
+            <div class="form-row">
+                <h5>{{ book.author }}</h5>
+            </div>
+            <div class="form-row">
+                <h5>{{ book.published_date }}</h5>
+            </div>
+            <a href="{% url 'product' product_id=book.id %}" class="glow-button">
+                Подробнее
+            </a>
+        </form>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>Ничего не найдено.</p>
+    {% endif %}
+{% endblock %}

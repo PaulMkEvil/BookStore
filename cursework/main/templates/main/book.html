@@ -1,8 +1,16 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Книжная полка{% endblock %}
+{% block title %}{{ product.title }}{% endblock %}
 
 {% block body %}
-    <h1>Заглушка</h1>
+    <div class="book-details">
+        <h2>{{ product.title }}</h2>
+        <p><strong>Автор:</strong> {{ product.author }}</p>
+        <p><strong>Описание:</strong> {{ product.description }}</p>
+        <p><strong>Дата публикации:</strong> {{ product.published_date }}</p>
+        {%if not user.is_anonymous%}
+            <a href="{{product.get_add_to_cart_url}}" class="button">Добавить на полку</a>
+        {%endif%}
+    </div>
 
 {% endblock %}

@@ -6,30 +6,34 @@
     <div class="main-container-right">
         <div class = "catalog-categories" >
           {% for cat in categories%}
-          <a style="color:black; text-decoration: none;" href="{{cat.link}}" {% if category == cat.id %} class="active" {% endif %}>{{cat.name}}</a>
+          <a style="color:black; text-decoration: none;" href="{{cat.link}}" {% if category == cat.id %} class="active" {% endif %}>| {{cat.name}} |</a>
           {% endfor %}
         </div>
         <hr>
-        <div class="catalog">
+        <div class="ui-container">
           {% if products%} {% for product in products %}
-          <div class="product-item">
-            <a href="./product/{{product.id}}">
+          <div class="ui-form">
+            <a href="./product/{{product.id}}" style="color:black; text-decoration: none;">
             <div class="product-list">
-              <h3 style="color:black; text-decoration: none;">{{product.title}}</h3>
-              <span style="color:black; text-decoration: none;" class="author">{{product.author}}</span>
-              <span style="color:black; text-decoration: none;" class="published_date">{{product.published_date}}</span>
-              {%if not user.is_anonymous%}
-              <a href="{{product.get_add_to_cart_url}}" class="button"
-                >Добавить на полку</a>
-              {%endif%}
+              <h3 class="form-row">{{product.title}}</h3>
+              <span class="form-row">{{product.author}}</span>
+              <span lass="form-row">{{product.published_date}}</span>
             </a>
             </div>
+            {%if not user.is_anonymous%}
+            <a href="{{product.get_add_to_cart_url}}" class="glow-button">Добавить на полку</a>
+              {%endif%}
           </div>
-          {% endfor %} {% else %}
-          <h1>Книг нет</h1>
-          <p>Подождите, пока они появятся</p>
-          {% endif %}
+          {% endfor %}
+            {% else %}
+            <div class="ui-none">
+              <h1>Книг нет</h1>
+              <p>Подождите, пока они появятся</p>
+            </div>
+            {% endif %}
         </div>
     </div>
+
+
 
 {% endblock %}

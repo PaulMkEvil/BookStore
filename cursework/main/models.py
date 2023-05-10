@@ -18,6 +18,7 @@ class Book(models.Model):
     category = models.CharField("Категория", choices=CATEGORY_CHOICES, max_length=2)
     author = models.CharField("Автор", max_length=50)
     description = models.TextField("Описание", max_length=500)
+    book_file = models.FileField(upload_to='pdfs', default='none')
     published_date = models.DateField()
 
     def __str__(self):
