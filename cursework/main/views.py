@@ -30,22 +30,17 @@ def about(request):
 
 
 def book_read(request, product_id):
-    # Получите ссылку на PDF из модели
     book = Book.objects.get(id=product_id)
 
-    # Укажите путь к папке, где хранятся PDF-файлы
     file_path = book.book_file.path
 
-    # Проверьте, существует ли файл PDF
     if os.path.exists(file_path):
         with open(file_path, 'rb') as f:
-            # Определите тип содержимого файла
             content_type, _ = mimetypes.guess_type(file_path)
             response = HttpResponse(f.read(), content_type=content_type)
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
 
-    # Если файл PDF не найден, верните 404 ошибку или другую обработку ошибки
     return HttpResponse('PDF not found', status=404)
 
 def search(request):
@@ -64,7 +59,7 @@ def create_book(request):
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('catalog')  # Перенаправьте пользователя на страницу списка книг
+            return redirect('catalog')
     else:
         form = BookForm()
     return render(request, 'main/create_book.html', {'form': form})
