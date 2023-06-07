@@ -21,7 +21,9 @@
       </a>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        {% if user.is_authenticated %}
         <li><a href="{% url 'cart' %}" class="nav-link px-2 link-secondary">Полка</a></li>
+        {% endif %}
         <li><a href="{% url 'about' %}" class="nav-link px-2 link-dark">Информация</a></li>
         <li><a href="{% url 'catalog' %}" class="nav-link px-2 link-dark">Каталог</a></li>
         {% if request.user.is_superuser %}
