@@ -26,8 +26,12 @@ def index(request):
 
 
 def about(request):
-    return render(request, "main/about.html")
+    users = auth.models.User.objects.all()
+    return render(request, "main/about.html", {"users": users})
 
+def orders(request):
+    orders = Order.objects.all()
+    return render(request, "main/orders.html", {"orders": orders})
 
 def book_read(request, product_id):
     book = Book.objects.get(id=product_id)

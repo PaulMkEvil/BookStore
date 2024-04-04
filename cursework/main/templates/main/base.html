@@ -28,6 +28,7 @@
         {% if request.user.is_superuser %}
         <li><a href="{% url 'create_book' %}" class="nav-link px-2 link-dark">Добавить книгу</a></li>
         <li><a href="{% url 'about' %}" class="nav-link px-2 link-dark">Пользователи</a></li>
+        <li><a href="{% url 'orders' %}" class="nav-link px-2 link-dark">Заказы</a></li>
         {% endif %}
         {% if user.is_authenticated %}
         <li><span class="nav-link px-2 link-dark" style="margin-left: 5px">Пользователь: {{ user.username }}</span></li>

@@ -1,33 +1,38 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Пользователи{% endblock %}
+{% block title %}Заказы{% endblock %}
 
 {% block body %}
 
 <div class="main-container-right">
         <div class="cart">
-          <center><h2 style="margin-botto5em;">Пользователи</h2></center>
-          {% if users %}
+          <center><h2 style="margin-botto5em;">Заказы</h2></center>
+          {% if orders %}
           <table class="table">
               <thead>
               <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Имя</th>
+                  <th scope="col">Пользователь</th>
+                  <th scope="col">Заказ</th>
                   <th scope="col">Действие</th>
               </tr>
               </thead>
               <tbody>
-              {% for user in users %}
+              {% for order in orders %}
                   <tr>
                       <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ user.username }}</td>
+                      <td>{{ order.user }}</td>
+                      <td>{{ order.ordered }}</td>
                       <td>
-                          <a href=" " style="color:black; text-decoration: none;">Заблокировать</a>
+                          <a href=" " style="color:black; text-decoration: none;">Отклонить</a>
+                      </td>
+                      <td>
+                          <a href=" " style="color:black; text-decoration: none;">Принять</a>
                       </td>
                   </tr>
               {% empty %}
                   <tr>
-                      <td colspan='5'>Пользователей нет</td>
+                      <td colspan='5'>Заказов нет</td>
                   </tr>
                   <tr>
                       <td colspan="5">
@@ -36,7 +41,7 @@
                   </tr>
               {% endfor %}
               {% else %}
-                  <h1>Пользователей нет</h1>
+                  <h1>Заказов нет</h1>
                   <a href="{% url 'catalog' %}">На главную</a>
               {% endif %}
               </tbody>
