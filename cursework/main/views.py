@@ -158,7 +158,7 @@ def add_to_cart(request, pk):
     if order_qs.exists():
         order = order_qs[0]
         if order.items.filter(item__id=pk).exists():
-            order_item.quantity = 1
+            order_item.quantity += 1
             order_item.save()
             return redirect("cart")
         else:
@@ -184,7 +184,11 @@ def remove_single_item_from_cart(request, pk):
             order_item = BookItem.objects.filter(
                 item=item, user=request.user, ordered=False
             )[0]
-            order.items.remove(order_item)
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order.items.remove(order_item)
             return redirect("cart")
         else:
             return redirect("book", pk=pk)

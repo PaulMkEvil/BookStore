@@ -10,21 +10,36 @@
           {% endfor %}
         </div>
         <hr>
-        <div class="ui-container">
-          {% if products%} {% for product in products %}
-          <div class="ui-form">
-            <a href="./product/{{product.id}}" style="color:black; text-decoration: none;">
-            <div class="product-list">
-              <h3 class="form-row">{{product.title}}</h3>
-              <span class="form-row">{{product.author}}</span>
-              <span lass="form-row">{{product.published_date}}</span>
-            </a>
+
+            <div class="container">
+                <div class="row">
+                    {% if products%} {% for product in products %}
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <div class="product-card">
+                            <div class="product-thumb">
+                                <a href="./product/{{product.id}}"><img src="{{ product.book_img.url }}" class="img-thumbnail"></a>
+                            </div>
+                            <div class="product-details">
+                                <h4>{{ product.title }}</h4>
+                                <p>{{ product.author }}</p>
+                                <p>{{ product.published_date }}</p>
+                                <div class="product-bottom-details d-flex justify-content-between">
+                                    <div class="product-price">
+                                        <small>{{ product.price }} руб.</small>
+                                    </div>
+                                    <div class="product-links">
+                                        {%if not user.is_anonymous%}
+                                        <a href="{{product.get_add_to_cart_url}}" class="btn btn-outline-dark">В корзину</a>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            {%if not user.is_anonymous%}
-            <a href="{{product.get_add_to_cart_url}}" class="glow-button">Добавить на полку</a>
-              {%endif%}
-          </div>
-          {% endfor %}
+
             {% else %}
             <div class="ui-none">
               <h1>Книг нет</h1>

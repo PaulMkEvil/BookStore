@@ -8,8 +8,9 @@
         <p><strong>Автор:</strong> {{ product.author }}</p>
         <p><strong>Описание:</strong> {{ product.description }}</p>
         <p><strong>Дата публикации:</strong> {{ product.published_date }}</p>
+        <p><strong>Цена:</strong> {{ product.price }}</p>
         {%if not user.is_anonymous%}
-            <a href="{{product.get_add_to_cart_url}}" class="glow-button">Добавить на полку</a>
+            <a href="{{product.get_add_to_cart_url}}" class="btn btn-outline-dark">В корзину</a>
         {%endif%}
     </div>
 
@@ -17,7 +18,7 @@
     <form method="POST" action="{% url 'add_review' product_id=product.id %}">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="glow-button">Добавить отзыв</button>
+      <button type="submit" class="btn btn-outline-dark">Добавить отзыв</button>
     </form>
 
 
@@ -32,7 +33,7 @@
         {% if review.user == request.user %}
         <form method="POST" action="{% url 'delete_review' product_id=product.id review_id=review.id %}">
             {% csrf_token %}
-            <button type="submit" class="glow-button">Удалить отзыв</button>
+            <button type="submit" class="btn btn-outline-dark">Удалить отзыв</button>
         </form>
         {% endif %}
       </li>

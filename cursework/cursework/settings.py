@@ -89,10 +89,10 @@ WSGI_APPLICATION = "cursework.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_SERVER"),
+        "NAME": 'bookstore',
+        "USER": 'postgres',
+        "PASSWORD": 'qwerty',
+        "HOST": 'localhost',
         "PORT": 5432,
     }
 }
@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'main/static'),
 ]
 
 
@@ -139,6 +139,9 @@ USE_TZ = True
 
 STATIC_URL = "main/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = "main/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

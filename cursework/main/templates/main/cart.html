@@ -1,12 +1,12 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Книжная полка{% endblock %}
+{% block title %}Корзина{% endblock %}
 
 {% block body %}
 
     <div class="main-container-right">
         <div class="cart">
-          <center><h2 style="margin-botto5em;">Полка</h2></center>
+          <center><h2 style="margin-botto5em;">Корзина</h2></center>
           {% if object.items.all %}
           <table class="table">
               <thead>
@@ -14,8 +14,9 @@
                   <th scope="col">#</th>
                   <th scope="col">Название</th>
                   <th scope="col">Автор</th>
-                  <th scope="col">Действие</th>
-                  <th scope="col">Информация</th>
+                  <th scope="col">Количество</th>
+                  <th scope="col">Цена</th>
+                  <th scope="col">Демо</th>
               </tr>
               </thead>
               <tbody>
@@ -24,8 +25,11 @@
                       <th scope="row">{{ forloop.counter }}</th>
                       <td>{{ order_item.item.title }}</td>
                       <td>{{ order_item.item.author }}</td>
+                      <td>{{ order_item.item.price }} ₽</td>
                       <td>
-                          <a href="{% url 'remove_single_item_from_cart' order_item.item.pk %}" style="color:black; text-decoration: none;">Удалить</a>
+                          <a href="{% url 'remove_single_item_from_cart' order_item.item.pk %}" style="color:black; text-decoration: none;">-</a>
+                          <p class="count">{{ order_item.quantity }}</p>
+                          <a href="{% url 'add_to_cart' order_item.item.pk %}" style="color:black; text-decoration: none;">+</a>
                       </td>
                       <td>
                           <a href="{% url 'book_read' product_id=order_item.item.id %}" style="color:black; text-decoration: none;">Прочитать</a>
@@ -33,17 +37,25 @@
                   </tr>
               {% empty %}
                   <tr>
-                      <td colspan='5'>Полка пуста</td>
+                      <td colspan='5'>Корзина пуста</td>
                   </tr>
                   <tr>
                       <td colspan="5">
-                      <a class='btn btn-primary float-right' href='/'>Вернуться на главную</a>
+                      <a class="btn btn-outline-dark" href='/'>Вернуться на главную</a>
                       </td>
                   </tr>
               {% endfor %}
+              <div class="cart-total">
+                     <span class="cart-total-label"><b>Total:</b></span>
+                     <span class="cart-total-price"><b>{{ object.get_total }} ₽</b></span>
+                  </div>
+                  <div class="cart-buttons">
+                    <a href="{% url 'catalog' %}" class="btn btn-outline-dark">Каталог</a>
+                    <a href="\" class="btn btn-outline-dark">Далее</a>
+                 </div>
               {% else %}
-                  <h1>Полка пуста</h1>
-                  <a href="{% url 'catalog' %}">В каталог</a>
+                  <h1>Корзина пуста</h1>
+                  <a href="{% url 'catalog' %}" class="btn btn-outline-dark">В каталог</a>
               {% endif %}
               </tbody>
           </table>

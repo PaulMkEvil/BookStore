@@ -18,8 +18,10 @@ class Book(models.Model):
     title = models.CharField("Название", max_length=50)
     category = models.CharField("Категория", choices=CATEGORY_CHOICES, max_length=2)
     author = models.CharField("Автор", max_length=50)
+    price = models.FloatField("Цена", default=500)
     description = models.TextField("Описание", max_length=500)
     book_file = models.FileField(upload_to='media/pdfs', default='none')
+    book_img = models.FileField(upload_to='static/img', default='none')
     published_date = models.DateField()
 
     def __str__(self):
@@ -47,9 +49,19 @@ class BookItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Book, on_delete=models.CASCADE)
+    quantity = models.IntegerField("Количество", default=1)
 
     def __str__(self):
         return self.item.title
+
+    def get_total_item_price(self):
+        return self.quantity * self.item.price
+
+    def get_final_price(self):
+        return self.get_total_item_price
+
+    def get_quantity(self):
+        return self.quantity
 
 
 class Order(models.Model):
@@ -59,11 +71,11 @@ class Order(models.Model):
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
 
-    # def get_total(self):
-    #     total = 0
-    #     for order_item in self.items.all():
-    #         total += order_item.get_total_item_price()
-    #     return total
+    def get_total(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_total_item_price()
+        return total
 
     def __str__(self):
         return self.user.username
