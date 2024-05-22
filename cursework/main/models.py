@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 CATEGORY_CHOICES = (
@@ -44,6 +46,10 @@ class Review(models.Model):
     comment = models.TextField(max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    def clean(self):
+        if self.rating is not None and (self.rating < 1 or self.rating > 5):
+            raise ValidationError(_('Рейтинг должен быть в диапазоне от 1 до 5.'))
+
 
 class BookItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -70,6 +76,11 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
+    ORDER_STATUS_CHOICES = (
+        ('В_обработке', 'В обработке'),
+        ('Принят', 'Принят'),
+    )
+    status = models.CharField("Статус заказа", max_length=20, choices=ORDER_STATUS_CHOICES, default='В_обработке')
 
     def get_total(self):
         total = 0

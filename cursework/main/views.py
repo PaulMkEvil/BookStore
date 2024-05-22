@@ -30,6 +30,16 @@ def about(request):
     return render(request, "main/about.html", {"users": users})
 
 def orders(request):
+    if request.method == "POST":
+        order_id = request.POST.get("order_id")
+        action = request.POST.get("action")
+        order = Order.objects.get(pk=order_id)
+        if action == "accept":
+            order.status = "Принят"
+            order.save()
+        elif action == "reject":
+            order.delete()
+
     orders = Order.objects.all()
     return render(request, "main/orders.html", {"orders": orders})
 

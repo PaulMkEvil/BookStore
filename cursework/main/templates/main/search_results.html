@@ -6,22 +6,34 @@
     <h2>Результаты поиска для "{{ query }}"</h2>
 
     {% if books %}
-    <div class="ui-container">
-        {% for book in books %}
-        <form action="" class="ui-form">
-            <h3>{{ book.title }}</h3>
-            <div class="form-row">
-                <h5>{{ book.author }}</h5>
+    <section class="main-content">
+        <div class="container">
+            <div class="row">
+                {% for book in books %}
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="product-card">
+                        <div class="product-thumb">
+                            <a href="#"><img src="{{ book.book_img.url }}" class="img-thumbnail"></a>
+                        </div>
+                        <div class="product-details">
+                            <h4>{{ book.title }}</h4>
+                            <p>{{ book.author }}</p>
+                            <p>{{ book.published_date }}</p>
+                            <div class="product-bottom-details d-flex justify-content-between">
+                                <div class="product-price">
+                                    <small>{{ book.price }} руб.</small>
+                                </div>
+                                <div class="product-links">
+                                    <a href="{% url 'product' product_id=book.id %}" class="btn btn-outline-dark">Подробнее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="form-row">
-                <h5>{{ book.published_date }}</h5>
-            </div>
-            <a href="{% url 'product' product_id=book.id %}" class="glow-button">
-                Подробнее
-            </a>
-        </form>
-        {% endfor %}
-    </div>
+        </div>
+    </section>
     {% else %}
         <p>Ничего не найдено.</p>
     {% endif %}

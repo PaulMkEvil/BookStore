@@ -3,17 +3,21 @@
 {% block title %}{{ product.title }}{% endblock %}
 
 {% block body %}
-    <div class="book-details">
-        <h2>{{ product.title }}</h2>
-        <p><strong>Автор:</strong> {{ product.author }}</p>
-        <p><strong>Описание:</strong> {{ product.description }}</p>
-        <p><strong>Дата публикации:</strong> {{ product.published_date }}</p>
-        <p><strong>Цена:</strong> {{ product.price }}</p>
-        {%if not user.is_anonymous%}
-            <a href="{{product.get_add_to_cart_url}}" class="btn btn-outline-dark">В корзину</a>
-        {%endif%}
+    <div class="book-content d-flex justify-content-between">
+        <div class="book-img">
+            <img src="{{ product.book_img.url }}" class="img-thumbnail">
+        </div>
+        <div class="book-details">
+            <h2>{{ product.title }}</h2>
+            <p><strong>Автор:</strong> {{ product.author }}</p>
+            <p><strong>Описание:</strong> {{ product.description }}</p>
+            <p><strong>Дата публикации:</strong> {{ product.published_date }}</p>
+            <p><strong>Цена:</strong> {{ product.price }}</p>
+            {%if not user.is_anonymous%}
+                <a href="{{product.get_add_to_cart_url}}" class="btn btn-outline-dark">В корзину</a>
+            {%endif%}
+        </div>
     </div>
-
 
     <form method="POST" action="{% url 'add_review' product_id=product.id %}">
       {% csrf_token %}
@@ -23,22 +27,26 @@
 
 
 {% if product.reviews.all %}
-  <h2>Отзывы</h2>
-  <ul>
+  <h2 style="margin-top: 50px">Отзывы</h2>
+  <div class="row">
     {% for review in product.reviews.all %}
-      <li>
-        <h3>Пользователь: {{ review.user }} || {{ review.date_added }}</h3>
-        <p>Рейтинг: {{ review.rating }}</p>
-        <p>Комментарий: {{ review.comment }}</p>
-        {% if review.user == request.user %}
-        <form method="POST" action="{% url 'delete_review' product_id=product.id review_id=review.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-dark">Удалить отзыв</button>
-        </form>
-        {% endif %}
-      </li>
+      <div class="col-md-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Пользователь: {{ review.user }} || {{ review.date_added }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Рейтинг: {{ review.rating }}</h6>
+            <p class="card-text">{{ review.comment }}</p>
+            {% if review.user == request.user %}
+            <form method="POST" action="{% url 'delete_review' product_id=product.id review_id=review.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Удалить отзыв</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 {% else %}
   <p>Пока нет отзывов.</p>
 {% endif %}

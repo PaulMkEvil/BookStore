@@ -6,9 +6,9 @@
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
       <h1 class="display-4 fw-normal">Добро пожаловать в магазин "Booker"</h1>
       <p class="fs-5 text-body-secondary">У нас есть книги на любой вкус!</p>
-       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'search' %}" method="GET">
+       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-flex justify-content-between" action="{% url 'search' %}" method="GET">
            <input class="form-control form-control-blue text-bg-light" type="text" name="q" placeholder="Поиск...">
-<!--           <button type="submit">Найти</button>-->
+           <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
        </form>
     </div>
 

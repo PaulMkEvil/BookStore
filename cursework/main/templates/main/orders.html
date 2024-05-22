@@ -14,7 +14,7 @@
                   <th scope="col">#</th>
                   <th scope="col">Пользователь</th>
                   <th scope="col">Заказ</th>
-                  <th scope="col">Действие</th>
+                  <th scope="col">Статус</th>
               </tr>
               </thead>
               <tbody>
@@ -22,12 +22,29 @@
                   <tr>
                       <th scope="row">{{ forloop.counter }}</th>
                       <td>{{ order.user }}</td>
-                      <td>{{ order.ordered }}</td>
                       <td>
-                          <a href=" " style="color:black; text-decoration: none;">Отклонить</a>
+                        {% for item in order.items.all %}
+                            {{ item.item.title }} - Количество: {{ item.quantity }} <br>
+                        {% endfor %}
+                    </td>
+                      <td>{{ order.status }}</td>
+                      <td>
+                        {% if order.status == "В_обработке" %}
+                            <form method="post" action="{% url 'orders' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="order_id" value="{{ order.id }}">
+                                <input type="hidden" name="action" value="accept">
+                                <button type="submit" class="btn btn-outline-dark">Принять</button>
+                            </form>
+                        {% endif %}
                       </td>
                       <td>
-                          <a href=" " style="color:black; text-decoration: none;">Принять</a>
+                        <form method="post" action="{% url 'orders' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="btn btn-outline-dark">Отклонить</button>
+                        </form>
                       </td>
                   </tr>
               {% empty %}
